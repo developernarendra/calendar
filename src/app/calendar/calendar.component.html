@@ -1,0 +1,32 @@
+<mat-card>
+  <form [formGroup]="appointmentForm" (ngSubmit)="addAppointment()">
+    <mat-form-field>
+      <mat-label>Title</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit">Add Appointment</button>
+  </form>
+</mat-card>
+
+<div class="calendar">
+  <div class="calendar-header">
+    <div class="calendar-day" *ngFor="let day of calendarDays">
+      <div class="day-header">{{ day.getDate() }}</div>
+      <div cdkDropList [cdkDropListData]="getAppointmentsForDay(day)" (cdkDropListDropped)="drop($event)">
+        <mat-card *ngFor="let appointment of getAppointmentsForDay(day)" cdkDrag>
+          <mat-card-title>{{ appointment.title }}</mat-card-title>
+          <mat-card-subtitle>{{ appointment.date | date }}</mat-card-subtitle>
+          <button mat-icon-button (click)="deleteAppointment(appointment.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
